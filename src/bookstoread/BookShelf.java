@@ -3,17 +3,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class BookShelf {
-        private final List<String> books = new ArrayList<>();
-    public List<String> books() {
-        return Collections.unmodifiableList(books);
-    }
-    public void add(String... booksToAdd) {
-        books.addAll(Arrays.asList(booksToAdd));
-    }
 
-    public List<String> arrange() {
-        return books.stream().sorted().collect(Collectors.toList());
+    private final List<Book> books = new ArrayList<>();
+
+    public List<Book> books() {
+        // immutable
+        return List.copyOf(books);
     }
 
+    // Ajout de plusieurs livres à la fois
+    public void add(Book... newBooks) {
+        books.addAll(Arrays.asList(newBooks));
+    }
 
+    public List<Book> arrange() {
+        return books.stream()
+                .sorted(Comparator.comparing(Book::getTitle))
+                .toList();
+    }
 }
