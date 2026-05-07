@@ -2,13 +2,15 @@ package bookstoread;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.time.Month;
+import java.time.Year;
+import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class BookShelfSpec {
@@ -18,6 +20,7 @@ public class BookShelfSpec {
     private Book effectiveJava;
     private Book codeComplete;
     private Book mythicalManMonth;
+    private Book cleanCode;
 
     @BeforeEach
     void init() {
@@ -26,6 +29,7 @@ public class BookShelfSpec {
         effectiveJava = new Book("Effective Java", "Bloch", LocalDate.of(2008, 5, 8));
         codeComplete = new Book("Code Complete", "McConnell", LocalDate.of(2004, 6, 9));
         mythicalManMonth = new Book("The Mythical Man-Month", "Brooks", LocalDate.of(1975, 1, 1));
+        cleanCode = new Book("Clean Code", "Robert C. Martin", LocalDate.of(2008, Month.AUGUST, 1));
     }
 
     @Test
@@ -98,5 +102,14 @@ public class BookShelfSpec {
         assertEquals(mythicalManMonth, sortedBooks.get(0));
         assertEquals(codeComplete, sortedBooks.get(1));
         assertEquals(effectiveJava, sortedBooks.get(2));
+    }
+    @Test
+    @DisplayName("books inside bookshelf are grouped by publication year")
+    void groupBooksInsideBookShelfByPublicationYear() {
+        shelf.add(effectiveJava, codeComplete, mythicalManMonth, cleanCode);
+        Map<Year, List<Book>> booksByPublicationYear = shelf.groupByPublicationYear();
+        assertThat(booksByPublicationYear).containsKey(Year.of(2008)).containsValues(Arrays.asList(effectiveJava, cleanCode));
+        assertThat(booksByPublicationYear).containsKey(Year.of(2004)).containsValues(Collections.singletonList(codeComplete));
+        assertThat(booksByPublicationYear).containsKey(Year.of(1975)).containsValues(Collections.singletonList(mythicalManMonth));
     }
 }
