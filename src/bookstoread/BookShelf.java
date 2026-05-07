@@ -19,6 +19,10 @@ public class BookShelf {
     public List<Book> arrange() {
         return arrange(Comparator.naturalOrder());
     }
+    /**
+     * Organise les livres selon un critère spécifique fourni en paramètre.
+     * Utilise les Streams Java pour trier et collecter les résultats dans une nouvelle liste.
+     */
     public List<Book> arrange(Comparator<Book> criteria) {
         return books.stream().sorted(criteria).collect(Collectors.toList());
     }

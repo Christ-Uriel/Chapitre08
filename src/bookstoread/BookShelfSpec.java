@@ -86,6 +86,7 @@ public class BookShelfSpec {
     }
     @Test
     void shelfSortedByPublicationDate() {
+        // Arrange : On ajoute les livres dans le désordre
         shelf.add(effectiveJava);    // 2008
         shelf.add(mythicalManMonth); // 1975
         shelf.add(codeComplete);     // 2004
