@@ -24,7 +24,7 @@ public class Book implements Comparable<Book> {
 
     @Override
     public int compareTo(Book that) {
-        return this.title.compareTo(that.title);
+        return this.publishedOn.compareTo(that.publishedOn);
     }
 
     @Override

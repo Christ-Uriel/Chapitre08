@@ -23,9 +23,9 @@ public class BookShelfSpec {
     void init() {
         shelf = new BookShelf();
 
-        effectiveJava = new Book("Effective Java", "Bloch", LocalDate.now());
-        codeComplete = new Book("Code Complete", "McConnell", LocalDate.now());
-        mythicalManMonth = new Book("The Mythical Man-Month", "Brooks", LocalDate.now());
+        effectiveJava = new Book("Effective Java", "Bloch", LocalDate.of(2008, 5, 8));
+        codeComplete = new Book("Code Complete", "McConnell", LocalDate.of(2004, 6, 9));
+        mythicalManMonth = new Book("The Mythical Man-Month", "Brooks", LocalDate.of(1975, 1, 1));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class BookShelfSpec {
         List<Book> books = shelf.arrange();
 
         assertEquals(
-                asList(codeComplete, effectiveJava, mythicalManMonth),
+                asList(mythicalManMonth, codeComplete, effectiveJava),
                 books
         );
     }
@@ -82,6 +82,20 @@ public class BookShelfSpec {
     void bookshelfArrangedByUserProvidedCriteria() {
         shelf.add(effectiveJava, codeComplete, mythicalManMonth);
         List<Book> books = shelf.arrange(Comparator.<Book>naturalOrder().reversed());
-        assertEquals(asList(mythicalManMonth, effectiveJava, codeComplete), books, () -> "Books in a bookshelf are arranged in descending order of book title");
+        assertEquals(asList(effectiveJava, codeComplete, mythicalManMonth), books, () -> "Books in a bookshelf are arranged in descending order of book title");
+    }
+    @Test
+    void shelfSortedByPublicationDate() {
+        shelf.add(effectiveJava);    // 2008
+        shelf.add(mythicalManMonth); // 1975
+        shelf.add(codeComplete);     // 2004
+
+        // On récupère la liste qui doit être triée
+        List<Book> sortedBooks = shelf.arrange();
+
+        // On vérifie l'ordre chronologique
+        assertEquals(mythicalManMonth, sortedBooks.get(0));
+        assertEquals(codeComplete, sortedBooks.get(1));
+        assertEquals(effectiveJava, sortedBooks.get(2));
     }
 }
